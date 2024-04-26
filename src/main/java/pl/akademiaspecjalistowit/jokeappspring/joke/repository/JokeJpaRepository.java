@@ -10,4 +10,8 @@ import pl.akademiaspecjalistowit.jokeappspring.joke.entity.JokeEntity;
 public interface JokeJpaRepository extends JpaRepository<JokeEntity, Long> {
 
     List<JokeEntity> getJokeEntitiesByCategory(String category);
+
+    List<JokeEntity> findAll();
+
+    List<JokeEntity> findAllByCategory(String category);
 }
