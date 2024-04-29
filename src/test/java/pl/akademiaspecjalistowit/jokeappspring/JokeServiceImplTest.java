@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.mockito.Mockito;
 import pl.akademiaspecjalistowit.jokeappspring.joke.model.Joke;
 import pl.akademiaspecjalistowit.jokeappspring.joke.service.JokeServiceImpl;
 import pl.akademiaspecjalistowit.jokeappspring.joke.service.provider.JokeProvider;
+import pl.akademiaspecjalistowit.jokeappspring.joke.service.supplier.JokeSupplier;
 
 class JokeServiceImplTest {
 
@@ -19,7 +21,7 @@ class JokeServiceImplTest {
         List<JokeProvider> emptyProvidersList = List.of();
 
         //when
-        Executable e = () -> new JokeServiceImpl(emptyProvidersList);
+        Executable e = () -> new JokeServiceImpl(emptyProvidersList, Mockito.mock(JokeSupplier.class));
 
         //then
         assertThrows(RuntimeException.class, e);
@@ -42,7 +44,7 @@ class JokeServiceImplTest {
                 return null;
             }
         });
-        JokeServiceImpl jokeService = new JokeServiceImpl(jokeProviders);
+        JokeServiceImpl jokeService = new JokeServiceImpl(jokeProviders,  Mockito.mock(JokeSupplier.class));
 
         //when
         Joke jokeFromService = jokeService.getJoke();
@@ -58,7 +60,7 @@ class JokeServiceImplTest {
         Joke joke = new Joke("a1", "a2");
 
         List<JokeProvider> jokeProviders = provideSingleProviderReturningJokeByCategory(joke);
-        JokeServiceImpl jokeService = new JokeServiceImpl(jokeProviders);
+        JokeServiceImpl jokeService = new JokeServiceImpl(jokeProviders,  Mockito.mock(JokeSupplier.class));
 
         //when
         Joke jokeFromService = jokeService.getJoke("whatever");
@@ -76,7 +78,7 @@ class JokeServiceImplTest {
 
         List<JokeProvider> jokeProviders = provideSingleProviderReturningJokeByCategory(jokeA);
         jokeProviders.addAll(provideSingleProviderReturningJokeByCategory(jokeB));
-        JokeServiceImpl jokeService = new JokeServiceImpl(jokeProviders);
+        JokeServiceImpl jokeService = new JokeServiceImpl(jokeProviders,  Mockito.mock(JokeSupplier.class));
 
         //when
         List<Joke> jokes = new ArrayList<>();

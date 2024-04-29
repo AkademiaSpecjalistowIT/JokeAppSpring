@@ -24,8 +24,6 @@ public class JokeController {
 
     private final JokeService jokeService;
 
-    private final JokeJpaRepository jokeJpaRepository;
-
     @GetMapping
     public Joke getRandomJoke(@RequestParam(value = "category", required = false)
                                   Optional<String> category) {
@@ -35,22 +33,19 @@ public class JokeController {
 
     @PostMapping
     public void addJoke(@RequestBody Joke joke){
-        JokeEntity jokeEntity = new JokeEntity(joke.getId(), joke.getContent(), joke.getCategory());
-        jokeJpaRepository.save(jokeEntity);
+        jokeService.addJoke(joke);
     }
 
-    @GetMapping("/{id}")
-    public Joke getJokeById(@PathVariable Long id){
-        return jokeJpaRepository.findById(id)
-            .map(e->new Joke(e.getTechnicalId(),e.getContent(),e.getCategory()))
-            .orElseThrow(() -> new RuntimeException("Joke not found"));
-    }
+//    @GetMapping("/{id}")
+//    public Joke getJokeById(@PathVariable Long id){
+//        return jokeJpaRepository.findById(id)
+//            .map(e->new Joke(e.getTechnicalId(),e.getContent(),e.getCategory()))
+//            .orElseThrow(() -> new RuntimeException("Joke not found"));
+//    }
 
     @GetMapping("/category/{category}")
-    public List<Joke> getJokeByCategory(@PathVariable String category){
-        return jokeJpaRepository.getJokeEntitiesByCategory(category).stream()
-            .map(e->new Joke(e.getTechnicalId(),e.getContent(),e.getCategory()))
-            .toList();
+    public Joke getJokeByCategory(@PathVariable String category){
+        return jokeService.getJoke(category);
     }
 
 }

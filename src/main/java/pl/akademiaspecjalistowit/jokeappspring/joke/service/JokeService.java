@@ -7,4 +7,6 @@ public interface JokeService {
     Joke getJoke();
 
     Joke getJoke(String category);
+
+    void addJoke(Joke joke);
 }
